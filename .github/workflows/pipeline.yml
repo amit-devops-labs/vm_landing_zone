@@ -9,7 +9,6 @@ on:
 permissions:
   contents: read
 
-
 jobs:
 
   # =========================================================
@@ -26,33 +25,25 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-
       # 2. Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
-
 
       # 3. Azure Login
       - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       # 4. Terraform Init
       - name: Terraform Init
         working-directory: ./azure_landing_zone/environment/dev
         run: terraform init
 
-
       # 5. Terraform Validate
       - name: Terraform Validate
         working-directory: ./azure_landing_zone/environment/dev
         run: terraform validate
-
 
       # 6. Terraform Plan
       - name: Terraform Plan
@@ -68,14 +59,14 @@ jobs:
     name: Terraform Apply
     runs-on: ubuntu-latest
 
-    # Run Apply only after Plan succeeds
+    # Apply starts only after Plan succeeds
     needs: terraform-plan
 
-    # Run Apply only when code is merged/pushed to main
+    # Apply only on main branch
     if: github.ref == 'refs/heads/main'
 
     # GitHub Environment
-    # Required Reviewer will provide manual approval
+    # Required reviewer will approve before Apply
     environment:
       name: Production
 
@@ -85,27 +76,20 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-
       # 2. Setup Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
-
 
       # 3. Azure Login
       - name: Azure Login
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       # 4. Terraform Init
       - name: Terraform Init
         working-directory: ./azure_landing_zone/environment/dev
         run: terraform init
-
 
       # 5. Terraform Apply
       - name: Terraform Apply
