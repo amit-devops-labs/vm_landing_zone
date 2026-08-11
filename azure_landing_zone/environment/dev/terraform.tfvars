@@ -9,4 +9,9 @@ my_rgs = {
         location = "Central India"
     }
 
+    rg3 = {
+        name = "rg_amit3"
+        location = "Central India"
+    }
+
 }
