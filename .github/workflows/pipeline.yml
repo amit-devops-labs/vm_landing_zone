@@ -41,6 +41,14 @@ jobs:
           tflint --init
           tflint
 
+      # 5. Checkov - IaC Security Scan
+      - name: Install Checkov
+        run: pip install checkov
+
+      - name: Run Checkov
+        working-directory: ./azure_landing_zone/environment/dev
+        run: checkov -d . --framework terraform
+
       # 5. Azure Login
       - name: Azure Login
         uses: azure/login@v2
