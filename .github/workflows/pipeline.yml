@@ -41,6 +41,8 @@ jobs:
           tflint --init
           tflint
 
+ 
+
       # 5. Azure Login
       - name: Azure Login
         uses: azure/login@v2
